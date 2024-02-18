@@ -1,13 +1,34 @@
-const {Client, GatewayIntentBits, EmbedBuilder, PermissionsBitField, Permissions} = require('discord.js')
+const { TOKEN} = require("./config/config.js");
+const { Client, GatewayIntentBits } = require("discord.js");
+const registerCommands = require("./commands/registerCommands");
+const pingCommand = require("./commands/ping");
 
-const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]})
-const { token } = require('./config/config.js');
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+    ],
+});
 
+const commands = [pingCommand];
+
+// Load all commands async
+(async () => {
+    await registerCommands(commands);
+})();
 
 client.on("ready", () => {
-    console.log("Bot is online!")
-})
+    console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isCommand()) return;
+    if (interaction.commandName === 'ping') {
+        await interaction.reply('Pong!');
+    }
+});
 
 
-
-client.login(token)
+// Login bot
+client.login(TOKEN);
