@@ -15,3 +15,6 @@ RUN node src/deploy-commands.js
 
 # Set the default command to start your application
 CMD ["node", "./src/index.js"]
+
+# docker run -d --rm pandybot
+# docker stop container-id
